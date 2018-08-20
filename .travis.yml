@@ -3,7 +3,7 @@ sudo: required
 
 addons:
   sonarcloud:
-    organization: "sonarcloud"
+    organization: "vikkasyousaf-github"
     token:
       secure: "c52e68fc191870f23c6bebbc5fe2010cd077ce5c"
 
