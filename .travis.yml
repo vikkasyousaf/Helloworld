@@ -1,26 +1,6 @@
 dist: trusty
 sudo: required
 
-# This moves Kubernetes specific config files.
-env:
-- CHANGE_MINIKUBE_NONE_USER=true
-
-addons:
-  sonarcloud:
-    organization: "vikkasyousaf-github"
-    token:
-      secure: "c52e68fc191870f23c6bebbc5fe2010cd077ce5c"
-
-jdk:
-  - oraclejdk8
-
-before_script:
-
-script:
-
-cache:
-  directories:
-    - '$HOME/.sonar/cache'
 
 deploy:
   provider: pages
@@ -28,4 +8,4 @@ deploy:
   github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
   keep-history: true
   on:
-    branch: master
+    branch: Test_Travis
