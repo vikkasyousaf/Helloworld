@@ -15,7 +15,7 @@ jdk:
 before_script:
 
 script:
-  - sonar-scanner
+  - sonar-scanner -Dsonar.login=70f4c74b28faa6e52226ab587c4e7231f353de20
 
 cache:
   directories:
