@@ -8,8 +8,6 @@ env:
 addons:
   sonarcloud:
     organization: "vikkasyousaf-github"
-    token:
-      secure: "c52e68fc191870f23c6bebbc5fe2010cd077ce5c"
 
 jdk:
   - oraclejdk8
@@ -26,7 +24,7 @@ before_script:
 - JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}'; until kubectl get nodes -o jsonpath="$JSONPATH" 2>&1 | grep -q "Ready=True"; do sleep 1; done
 
 script:
-  - sonar-scanner
+  - sonar-scanner -Dsonar.login= 2061291aa3ffc2ac55b9b570705f57f3451b053c
 
   - kubectl cluster-info
 # Verify kube-addon-manager.
