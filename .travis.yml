@@ -1,0 +1,30 @@
+dist: trusty
+sudo: required
+
+# This moves Kubernetes specific config files.
+env:
+- CHANGE_MINIKUBE_NONE_USER=true
+
+addons:
+  sonarcloud:
+    organization: "vikkasyousaf-github"
+
+jdk:
+  - oraclejdk8
+
+before_script:
+
+script:
+  - sonar-scanner -Dsonar.login=70f4c74b28faa6e52226ab587c4e7231f353de20
+
+cache:
+  directories:
+    - '$HOME/.sonar/cache'
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep-history: true
+  on:
+    branch: master
