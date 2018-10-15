@@ -1,29 +1,5 @@
 # Investigating Elasticsearch Solution
 
-```
-## AWS ES Service
-
-There are tons of things that can cause it to become unstable, most of which are related to query patterns, 
-	* The documents being indexed, 
-	* The number of dynamic fields being created, 
-	* Imbalances in the sizes of shards, 
-	* The ratio of documents to heap space, etc. 
-
-	Diagnosing these problems is a bit of an art, and one needs a lot of metrics, log files and administrative APIs to drill down and find the root cause of an issue. AWS’s Elasticsearch doesn’t provide access to any of those things, leaving you no other option but to contact AWS’s support team.
-	Limited to clusters of 20 nodes, limited scalability
-
-## ES
-
-CHECK DEBUGGING
-
-TROUBLESHOOT
-
-AUTHENTICATION
-
-MANAGEMENT EFFORT
-
-```
-
 
 ## Authentication options
 
@@ -146,6 +122,7 @@ We are currently using this policy.
 
 
 ## Security concerns
+
 ## Pricing
 
 1. On-Demand instance pricing
@@ -169,6 +146,15 @@ We are currently using this policy.
 	* Adjust your application configuration
 
 5. You cannot use automated snapshots to migrate to new domains. Automated snapshots are read-only from within a given domain For migrations, you must use manual snapshots stored in your own repository. Standard S3 charges apply to manual snapshots.
+
+6. There are tons of things that can cause it to become unstable, most of which are related to query patterns, 
+  * The documents being indexed, 
+  * The number of dynamic fields being created, 
+  * Imbalances in the sizes of shards, 
+  * The ratio of documents to heap space, etc. 
+  * Limited to clusters of 20 nodes, limited scalability
+
+  Diagnosing these problems is a bit of an art, and one needs a lot of metrics, log files and administrative APIs to drill down and find the root cause of an issue. AWS’s Elasticsearch doesn’t provide access to any of those things, leaving you no other option but to contact AWS’s support team.
 
 
 ### ES manage
@@ -222,18 +208,17 @@ We are currently using this policy.
 
 | Elasticsearch Version     | Plugins                          |
 |---------------------------|----------------------------------|
-| 6.3.                      | ICU Analysis           		   |
-|                  		    | Ingest Attachment Processor      |
-|                 			| Ingest User Agent Processor      |
-|       					| Japanese (kuromoji) Analysis     |
-|        		            | Mapper Murmur3                   |
-|          		            | Mapper Size                      |
-|         				    | Phonetic Analysis                |
-|       			        | Smart Chinese Analysis           |
-|      				        | Stempel Polish Analysis          |
-|    						| Ukrainian Analysis   			   |
-|   						| Seunjeon Korean Analysis         |
-|   						|    						       |
+| 6.3.                      | ICU Analysis              		   |
+|                  		      | Ingest Attachment Processor      |
+|                 			    | Ingest User Agent Processor      |
+|       					          | Japanese (kuromoji) Analysis     |
+|        		                | Mapper Murmur3                   |
+|          		              | Mapper Size                      |
+|         				          | Phonetic Analysis                |
+|       			              | Smart Chinese Analysis           |
+|      				              | Stempel Polish Analysis          |
+|    					            	| Ukrainian Analysis   			       |
+|   					             	| Seunjeon Korean Analysis         |
 
 [List of AWS ES Plugins](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-plugins.html)
 
@@ -242,37 +227,36 @@ We are currently using this policy.
 
 | Elasticsearch Version     | Plugins                          |
 |---------------------------|----------------------------------|
-| 6.4. Core	                | Alerting	 	           		   |
-|                  		    | ICU Analysis   				   |
-|                 			| Japanese (kuromoji) Analysis     |
-|       					| Korean (nori) Analysis  		   |
-|        		            | Phonetic Analysis                |
-|          		            | Smart Chinese Analysis           |
-|         				    | Stempel Polish Analysis          |
-|       			        | Ukrainian Analysis       		   |
-|      				        | EC2 Discovery       			   |
-|    						| Azure Classic Discovery  		   |
-|   						| GCE Discovery      			   |
-|   						| File-Based Discovery Plugin      |
-|   						| Ingest Attachment Processor      |
-|   						| Ingest Geoip Processor   	       |
-|   						| Ingest user agent processor      |
-|   						| Management(X-Pack)               |
-|   						| Mapper Size  				       |
-|   						| Mapper Murmur3  		           |
-|   						| Security(X-Pack)  			   |
-|   						| S3 Repository  			   	   |
-|   						| Hadoop HDFS Repository  	       |
-|   						| Google Cloud Storage Repository  |
-|   						| Store SMB 			  		   |
-|   						|       			  		       |
+| 6.4. Core	                | Alerting	 	               		   |
+|                  		      | ICU Analysis   				           |
+|                 			    | Japanese (kuromoji) Analysis     |
+|       					          | Korean (nori) Analysis  		     |
+|        		                | Phonetic Analysis                |
+|          		              | Smart Chinese Analysis           |
+|         				          | Stempel Polish Analysis          |
+|       			              | Ukrainian Analysis       		     |
+|      				              | EC2 Discovery       			       |
+|    						            | Azure Classic Discovery  		     |
+|   						            | GCE Discovery      			         |
+|   						            | File-Based Discovery Plugin      |
+|   						            | Ingest Attachment Processor      |
+|   						            | Ingest Geoip Processor   	       |
+|   						            | Ingest user agent processor      |
+|   					             	| Management(X-Pack)               |
+|   					             	| Mapper Size  				             |
+|   						            | Mapper Murmur3  		             |
+|   						            | Security(X-Pack)  			         |
+|   						            | S3 Repository  			   	         |
+|   						            | Hadoop HDFS Repository  	       |
+|   						            | Google Cloud Storage Repository  |
+|   						            | Store SMB 			           		   |
 
 
 List of all plugins and integration for version 6.4, It also include community plugins:
 [Elasticsearch Plugins](https://www.elastic.co/guide/en/elasticsearch/plugins/6.4/index.html)
 
 
-### Reference:
+## Reference:
 
 1. [In-place version upgrades for Amazon Elasticsearch Service](https://aws.amazon.com/blogs/database/in-place-version-upgrades-for-amazon-elasticsearch-service/)
 
