@@ -83,22 +83,22 @@ We are currently using this policy.
     ** Support external user management systems such as LDAP(Lightweight Directory Access Protocol) and Active Directory
 
   * User authorization and access control
-    ** Role-based access control
+    * Role-based access control
 
     ![Role-based access control](https://www.elastic.co/guide/en/elastic-stack-overview/current/security/authorization/images/authorization.png)
 
-    ** Attribute-based access control
+    * Attribute-based access control
 
   * Node/client authentication and channel encryption
-    ** X-Pack security supports configuring SSL/TLS for securing the communication channels
-    ** Certificate based node authentication
-    ** X-Pack security also enables you to configure IP Filters which can be seen as a light mechanism for node/client authentication.
-    ** To access control feature that allows or rejects hosts, domains, or subnets.
+    * X-Pack security supports configuring SSL/TLS for securing the communication channels
+    * Certificate based node authentication
+    * X-Pack security also enables you to configure IP Filters which can be seen as a light mechanism for node/client authentication.
+    * To access control feature that allows or rejects hosts, domains, or subnets.
 
   * Auditing
-    ** Audit trails log various activities/events that occur in the system. (e.g. security breach)
-    ** Which accounts for the type of events that are logged
-    ** These events include failed authentication attempts, user access denied, node connection denied, and more.
+    * Audit trails log various activities/events that occur in the system. (e.g. security breach)
+    * Which accounts for the type of events that are logged
+    * These events include failed authentication attempts, user access denied, node connection denied, and more.
 
 ## Pricing
 
