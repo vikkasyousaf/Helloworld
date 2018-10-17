@@ -3,19 +3,18 @@
 
 ## Authentication options
 
-### AWS ES Service
+### AWS ES Service User Authentication and Access for Kibana with Amazon Cognito
 
-1.  You can authenticate users to the service through Amazon Cognito and restrict access to specified authenticated users using AWS Identity and Access Management (IAM).
+1. AWS ES service is now integrate with Amazon Cognito to provide user-level authorization for Kibana, without the need to configure and manage proxy server.
 
-2. IAM policies can be set up to provide fine-grained access control:
-	* To the management API for operations like creating and scaling domains.
-	* And the data plane API for operations like uploading documents and executing queries. 
+2. With Cognito you can also set access policy for user or group of users, and make it easy to manage access control. 
 
-3. The node-to-node encryption capability by implementing TLS for all communications between instances in the ES domain.
+3. Kibana authentication is supported on all domains that use Elasticsearch 5.1 or greater and is available in 15 regions globally. 
 
-4. AWS Key Management Service (KMS) lets you encrypt data in Amazon Elasticsearch Service at-rest, including primary and replica indices, log files, memory swap files, and automated snapshots.
+4.  You can authenticate users to the service through Amazon Cognito and restrict access to specified authenticated users using AWS Identity and Access Management (IAM).
 
  AWS support three type of access policy to your domain 
+
 	* Resource-based policies
 	* Identity-based policies
 	* IP-based policies
@@ -47,42 +46,6 @@
 
 3. To restric the user replace `es:*` with `es:ESHttpGet`, in this case 'test-user' can only perform search operation, all other indices within the domain are inaccessible, and without permissions to use the es:ESHttpPut or es:ESHttpPost actions, test-user can't add or modify documents.
 
-4. We can also configure the role of power-user. Here will are allowing power-user-role to access all HTTP method excpet deleting cretical index.
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": [
-          "arn:aws:iam::123456789012:role/power-user-role"
-        ]
-      },
-      "Action": [
-        "es:ESHttpDelete",
-        "es:ESHttpGet",
-        "es:ESHttpHead",
-        "es:ESHttpPost",
-        "es:ESHttpPut"
-      ],
-      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/*"
-    },
-    {
-      "Effect": "Deny",
-      "Principal": {
-        "AWS": [
-          "arn:aws:iam::123456789012:role/power-user-role"
-        ]
-      },
-      "Action": [
-        "es:ESHttpDelete"
-      ],
-      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/critical-index*"
-    }
-  ]
-}
-```
 
 ### Identity-based policies
 
@@ -108,26 +71,40 @@
 
 ![Odentity-based policies vs Resource-based policies](https://docs.aws.amazon.com/IAM/latest/UserGuide/images/Types_of_Permissions.diagram.png)
 
-### IP-based Policies
+### IP-based policies
 
 We are currently using this policy.
 
-### AWS ES Service User Authentication and Access for Kibana with Amazon Cognito
+### Elasticsearch Authentication
 
-1. AWS ES service is now integrate with Amazon Cognito to provide user-level authorization for Kibana, without the need to configure and manage proxy server.
+1. X-Pack security provides the means to secure the Elastic cluster
+  * User authentication
+    ** Authentication process is handled by one or more authentication services called realms
+    ** Support external user management systems such as LDAP(Lightweight Directory Access Protocol) and Active Directory
 
-2. With Cognito you can also set access policy for user or group of users, and make it easy to manage access control. 
+  * User authorization and access control
+    ** Role-based access control
 
-3. Kibana authentication is supported on all domains that use Elasticsearch 5.1 or greater and is available in 15 regions globally. 
+    ![Role-based access control](https://www.elastic.co/guide/en/elastic-stack-overview/current/security/authorization/images/authorization.png)
 
+    ** Attribute-based access control
 
-## Security concerns
+  * Node/client authentication and channel encryption
+    ** X-Pack security supports configuring SSL/TLS for securing the communication channels
+    ** Certificate based node authentication
+    ** X-Pack security also enables you to configure IP Filters which can be seen as a light mechanism for node/client authentication.
+    ** To access control feature that allows or rejects hosts, domains, or subnets.
+
+  * Auditing
+    ** Audit trails log various activities/events that occur in the system. (e.g. security breach)
+    ** Which accounts for the type of events that are logged
+    ** These events include failed authentication attempts, user access denied, node connection denied, and more.
 
 ## Pricing
 
-1. On-Demand instance pricing
-2. Reserved Instance pricing
+1. [Amazon Elasticsearch Service pricing](https://aws.amazon.com/elasticsearch-service/pricing/)
 
+2. [Elasticsearch Service pricing](https://cloud.elastic.co/pricing)
 
 ## Management effort
 
@@ -180,9 +157,6 @@ We are currently using this policy.
 	* Amazon EBS metrics, 
 	* CPU, memory, and disk utilization for data and master nodes through Amazon CloudWatch
 
-4. Integrated with open-source tools and AWS Services, ingest data into Amazon Elasticsearch domain using,
-	* Amazon Kinesis Firehose, AWS IoT, or Amazon CloudWatch Logs.
-	* [Amazon Elasticsearch Service data ingestion page.](https://aws.amazon.com/elasticsearch-service/data-ingestion/)
 
 ### ES manage
 
@@ -252,7 +226,7 @@ We are currently using this policy.
 |   						            | Store SMB 			           		   |
 
 
-List of all plugins and integration for version 6.4, It also include community plugins:
+List of all plugins and integration for version 6.4, It also include community plugins and external tools that make it easier to work with ES:
 [Elasticsearch Plugins](https://www.elastic.co/guide/en/elasticsearch/plugins/6.4/index.html)
 
 
@@ -269,4 +243,7 @@ List of all plugins and integration for version 6.4, It also include community p
 5. [Hosted Elasticsearch Services Roundup: Elastic Cloud and Amazon Elasticsearch Service](https://www.elastic.co/blog/hosted-elasticsearch-services-roundup-elastic-cloud-and-amazon-elasticsearch-service)
 
 6. [Elasticsearch Service pricing calculator](https://cloud.elastic.co/pricing)
+
+7. [ES How security works](https://www.elastic.co/guide/en/elastic-stack-overview/current/how-security-works.html)
+
 
