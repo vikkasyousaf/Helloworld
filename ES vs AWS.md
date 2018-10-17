@@ -13,8 +13,7 @@
 
 4.  You can authenticate users to the service through Amazon Cognito and restrict access to specified authenticated users using AWS Identity and Access Management (IAM).
 
- AWS support three type of access policy to your domain 
-
+5. AWS support three type of access policy to your domain 
 	* Resource-based policies
 	* Identity-based policies
 	* IP-based policies
