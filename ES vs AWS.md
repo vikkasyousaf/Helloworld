@@ -79,8 +79,8 @@ We are currently using this policy.
 
 1. X-Pack security provides the means to secure the Elastic cluster
   * User authentication
-    ** Authentication process is handled by one or more authentication services called realms
-    ** Support external user management systems such as LDAP(Lightweight Directory Access Protocol) and Active Directory
+    * Authentication process is handled by one or more authentication services called realms
+    * Support external user management systems such as LDAP(Lightweight Directory Access Protocol) and Active Directory
 
   * User authorization and access control
     * Role-based access control
