@@ -45,7 +45,6 @@
 
 3. To restric the user replace `es:*` with `es:ESHttpGet`, in this case 'test-user' can only perform search operation, all other indices within the domain are inaccessible, and without permissions to use the es:ESHttpPut or es:ESHttpPost actions, test-user can't add or modify documents.
 
-
 ### Identity-based policies
 
 1. Identity-based IAM policies are attached to an IAM user, group, or role. These policies let you specify what that user, group, or role can do. For example, you can attach the policy to the IAM user named Bob, stating that he has permission to use the Amazon Elastic Compute Cloud (Amazon EC2) RunInstances action. The policy could further state that Bob has permission to get items from an Amazon DynamoDB table named MyCompany. You can also grant Bob access to manage his own IAM security credentials.
@@ -72,7 +71,35 @@
 
 ### IP-based policies
 
-We are currently using this policy.
+1. IP-based policies restrict access to a domain to one or more IP addresses. They are just resource base policy that just specify an anonymous prinicple and include a special condition element.
+
+2. The following IP-base policy grand access to all request that originate from `12.345.678.901`
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": [
+        "es:*"
+      ],
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": [
+            "12.345.678.901"
+          ]
+        }
+      },
+      "Resource": "arn:aws:es:us-west-1:987654321098:domain/test-domain/*"
+    }
+  ]
+}
+
+```
+
 
 ### Elasticsearch Authentication
 
@@ -83,10 +110,12 @@ We are currently using this policy.
 
   * User authorization and access control
     * Role-based access control
+      * In role base access control you authorize user by assigning priviliages to roles and assign roles to users and groups.
 
     ![Role-based access control](https://www.elastic.co/guide/en/elastic-stack-overview/current/security/authorization/images/authorization.png)
 
     * Attribute-based access control
+      * X-Pack provide attribute base access mechanism, Which allow you to use attribute to restict access to documents. For example you can assign attributes to user and then implement the access policy in an role definition.
 
   * Node/client authentication and channel encryption
     * X-Pack security supports configuring SSL/TLS for securing the communication channels
@@ -99,11 +128,13 @@ We are currently using this policy.
     * Which accounts for the type of events that are logged
     * These events include failed authentication attempts, user access denied, node connection denied, and more.
 
+
 ## Pricing
 
 1. [Amazon Elasticsearch Service pricing](https://aws.amazon.com/elasticsearch-service/pricing/)
 
 2. [Elasticsearch Service pricing](https://cloud.elastic.co/pricing)
+
 
 ## Management effort
 
@@ -115,7 +146,7 @@ We are currently using this policy.
 
 3. When nodes go down, they are automatically brought back up.
 
-4. Support for in-place Elasticsearch upgrades for domains(automated). You dont have to:
+4. Support for in-place Elasticsearch upgrades for domains(automated). Take a snapshot of cluster before proceding. It also preserves the same domain endpoint URL. You dont have to:
 	* Create manual snapshots 
 	* Create a new domain for the targeted version
 	* Restore the manual index snapshot to the new domain
@@ -123,19 +154,21 @@ We are currently using this policy.
 
 5. You cannot use automated snapshots to migrate to new domains. Automated snapshots are read-only from within a given domain For migrations, you must use manual snapshots stored in your own repository. Standard S3 charges apply to manual snapshots.
 
-6. There are tons of things that can cause it to become unstable, most of which are related to query patterns, 
-  * The documents being indexed, 
-  * The number of dynamic fields being created, 
-  * Imbalances in the sizes of shards, 
-  * The ratio of documents to heap space, etc. 
-  * Limited to clusters of 20 nodes, limited scalability
+6. There are tons of things that can cause it to become unstable, most of which are related to query patterns: 
+  	* The documents being indexed, 
+  	* The number of dynamic fields being created,
+  	* Imbalances in the sizes of shards, 
+  	* The ratio of documents to heap space, etc,
+  	* Limited to clusters of 20 nodes, limited scalability.
 
   Diagnosing these problems is a bit of an art, and one needs a lot of metrics, log files and administrative APIs to drill down and find the root cause of an issue. AWS’s Elasticsearch doesn’t provide access to any of those things, leaving you no other option but to contact AWS’s support team.
 
-
 ### ES manage
 
-1. Its a headache to manage all the infrastructure yourself. 
+1. Comparing to AWS ES: 
+  * Elasticsearch can be deploy in less then 5 minutes. They have simple and straightfarword interface. 
+  * One can easily decide about the instance by using [Elasticsearch Service pricing calculator](https://cloud.elastic.co/pricing). You can easily change the instance type and calculate the price at the same time.
+  * Elasticsearch uses Rolling Upgrade to upgrade one node at a time so the upgrading does not interrupt the serivce.
 
 
 ## Feature set
@@ -155,7 +188,6 @@ We are currently using this policy.
 	* Searchable documents,
 	* Amazon EBS metrics, 
 	* CPU, memory, and disk utilization for data and master nodes through Amazon CloudWatch
-
 
 ### ES manage
 
@@ -195,7 +227,6 @@ We are currently using this policy.
 
 [List of AWS ES Plugins](https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/aes-supported-plugins.html)
 
-
 ### ES plugins
 
 | Elasticsearch Version     | Plugins                          |
@@ -229,6 +260,34 @@ List of all plugins and integration for version 6.4, It also include community p
 [Elasticsearch Plugins](https://www.elastic.co/guide/en/elasticsearch/plugins/6.4/index.html)
 
 
+
+|                                        | Amazon Elasticsearch Service     | Elastic Elasticsearch Service    |
+|----------------------------------------|----------------------------------|----------------------------------|
+| Current Version                        | 6.3                              | 6.4
+| Elastic Stack - Open Source Features   | Some                             | All
+| Same Day Elastic Stack Version Release | No                               | Yes
+| X-Pack (Elastic Commercial Plugins)    | No                               | Yes, Security, Alerting, Monitoring, Graph, Reporting, Machine Learning
+| Elastic Technical Support              | No                               | Yes, Elastic Cloud Subscriptions
+| One-Click Upgrades                     | Yes                              | Yes
+| Hot-Warm Deployment Template           | No                               | Yes
+| Underlying Cluster Hardware            | Single instance type for all roles | Multiple instance types (via deployment templates) |
+| Default Snapshots                      | 1 time per day                   | 48 times per day Every 30 minutesStored for 48 hours
+| Instant Rollout of Elasticsearch and Kibana Security Patches | No         | Yes
+| Custom Plugin Support                  | Not supported                    | Supported
+| Java Transport Client                  | Not supported                    | Supported
+| Cross Zone Replication                 | Support for up to 2 availability zones | Support for up to 3 availability zones
+| SLA-Based Support                      | General level support, not specific to AWS ES | Yes
+| Uptime SLA                             | No                               | Yes, 99.95% cluster uptime in a given month as long as the cluster is deployed across 2 or more zones
+| Elastic Maps Service                   | Does not work out of the box     | Yes
+| Security                               | Only perimeter-level security and standard IAM policies  | <ul><li>Transport encryption</li><li>Authentication</li><li>Role-based access control</li><li>Field- and document-level security </li><li>Encryption at rest</li></ul>
+| Alerting                          | Need to build and manage your own system to create alerting functionalities. This depends on Amazon Cloudwatch, which comes with predefined, simple metrics. If you want something more sophisticated, or related to your data, you'll need to build a custom metric and alerts. | <ul><li>Allows you to create scheduled queries, conditions, and actions on your data in Elasticsearch.</li><li> UI to create, manage, and take actions on alerts.</li></ul> |
+| Monitoring                          | Depends on Amazon Cloudwatch, that covers a few metrics including cluster state, node information, etc.  | Feature-rich and complete monitoring product specifically designed for Elasticsearch and Kibana. <ul><li>Captures a wider range of metrics including search/index rate and latency, garbage collection count and duration, thread pool bulk rejection/queue, Lucene memory breakdown, and more with 10-second data granularity to ensure that clusters are running healthy.</li><li>Robust tools to diagnose, troubleshoot and keep your cluster healthy including automatic alerts on cluster issues.</li></ul>
+| Graph                          | No                    | Yes
+| Reporting                      | No                    | Yes
+
+
+
+
 ## Reference:
 
 1. [In-place version upgrades for Amazon Elasticsearch Service](https://aws.amazon.com/blogs/database/in-place-version-upgrades-for-amazon-elasticsearch-service/)
@@ -244,5 +303,3 @@ List of all plugins and integration for version 6.4, It also include community p
 6. [Elasticsearch Service pricing calculator](https://cloud.elastic.co/pricing)
 
 7. [ES How security works](https://www.elastic.co/guide/en/elastic-stack-overview/current/how-security-works.html)
-
-
