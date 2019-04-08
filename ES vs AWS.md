@@ -300,5 +300,4 @@ List of all plugins and integration for version 6.4, It also include community p
 
 5. [Hosted Elasticsearch Services Roundup: Elastic Cloud and Amazon Elasticsearch Service](https://www.elastic.co/blog/hosted-elasticsearch-services-roundup-elastic-cloud-and-amazon-elasticsearch-service)
 
-6. [Elasticsearch Service pricing calculator](https://cloud.elastic.co/pricing)
 
