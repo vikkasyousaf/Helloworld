@@ -302,4 +302,3 @@ List of all plugins and integration for version 6.4, It also include community p
 
 6. [Elasticsearch Service pricing calculator](https://cloud.elastic.co/pricing)
 
-7. [ES How security works](https://www.elastic.co/guide/en/elastic-stack-overview/current/how-security-works.html)
